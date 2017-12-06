@@ -27,6 +27,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.measure.quantity.Mass;
 import javax.sql.DataSource;
@@ -58,12 +59,15 @@ public class Main {
     return "index";
   }
 
-  @RequestMapping("/hello")
-  String hello(Map<String, Object> model) {
-    RelativisticModel.select();
-    Amount<Mass> m = Amount.valueOf("12 GeV").to(KILOGRAM);
-    model.put("science", "E=mc^2: 12 GeV = " + m.toString());
-    return "hello";
+  @RequestMapping("/prime/{number}")
+  String prime(@PathVariable String number, Map<String, Object> model) {
+    boolean b = Sample.isPrime(Integer.parseInt(number));
+    if (b) {
+      model.put("science", number + "は素数です");
+    } else {
+      model.put("science", number + "は素数ではない");
+    }
+    return "prime";
   }
 
   @RequestMapping("/db")
